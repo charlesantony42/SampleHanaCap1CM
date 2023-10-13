@@ -1,40 +1,136 @@
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: SampleHanaCap1CM
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
+modules:
+- name: SampleHanaCap1CM-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: SampleHanaCap1CM-db
+  - name: SampleHanaCap1CM-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm
+- name: SampleHanaCap1CM-db-deployer
+  type: hdb
+  path: db
+  requires:
+  - name: SampleHanaCap1CM-db
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - default-env.json
+    - .env
+- name: SampleHanaCap1CM
+  type: approuter.nodejs
+  path: app/
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: SampleHanaCap1CM-auth
+  - name: SampleHanaCap1CM-destination-service
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: SampleHanaCap1CM-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: SampleHanaCap1CM-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - vimproject.zip
+      name: vimproject
+      target-path: resources/
+    - artifacts:
+      - vimbasicapp.zip
+      name: vimbasicapp
+      target-path: resources/
+- name: vimproject
+  type: html5
+  path: app/vimproject
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: vimbasicapp
+  type: html5
+  path: app/vimbasicapp
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: SampleHanaCap1CM-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: SampleHanaCap1CM-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: SampleHanaCap1CM-sda-lab
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: SampleHanaCap1CM-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: SampleHanaCap1CM-html5-srv
+    service-plan: app-host
+- name: SampleHanaCap1CM-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: SampleHanaCap1CM-destination-service
+    service-plan: lite
 parameters:
+  deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npx cds build --production
-modules:
-  - name: SampleHanaCap1CM-srv
-    type: nodejs
-    path: gen/srv
-    parameters:
-      buildpack: nodejs_buildpack
-    build-parameters:
-      builder: npm
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
-    requires:
-      - name: SampleHanaCap1CM-db
-
-  - name: SampleHanaCap1CM-db-deployer
-    type: hdb
-    path: db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: SampleHanaCap1CM-db
-
-resources:
-  - name: SampleHanaCap1CM-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
+  - builder: custom
+    commands:
+    - npx cds build --production

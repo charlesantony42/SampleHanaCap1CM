@@ -1,0 +1,236 @@
+<mvc:View controllerName="vimbasicapp.controller.ItemView"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m" xmlns:table="sap.ui.table">
+    <Page title="{i18n>title}" showHeader="true">
+        <customHeader>
+            <Bar>
+				<contentRight>
+					<Button id="editButtonVIM" text="Edit" press="handleEditPress" />
+					<Button id="saveButtonVIM" text="Save" type="Emphasized" visible="false" press="handleSavePress" />
+					<Button id="cancelButtonVIM" text="Cancel" visible="false" press="handleCancelPress" />
+				</contentRight>
+			</Bar>
+        </customHeader>
+        <content>
+            <f:SimpleForm id="FormChange480_12120"
+			editable="true">
+			<f:content>
+                <Label text="Company Code" />
+                <!-- <Input value="{/Invoice_Header('1235')>CompanyCode}" id="name" editable="{view>/editEnabled}"/> -->
+                <Input id="compCode" />
+			</f:content>
+            <!-- <f:title>
+				<core:Title text="Vendor Invoice Deails for Review" />
+			</f:title> -->
+			<!-- <f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="1"
+					singleContainerFullSize="false" /> 
+			</f:layout> -->
+			<!-- <f:formContainers> -->
+				<!-- <f:FormContainer >
+					<f:formElements>
+						<f:FormElement label="Company Code">
+							<f:fields>
+								<Input value="{/Invoice_Header('1235')/CompanyCode}" id="name" editable="{view>/editEnabled}"/>
+							</f:fields>
+						</f:FormElement> -->
+						<!-- <f:FormElement label="Invoice Amount">
+							<f:fields>
+								<Input value="{CompanyCode}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Currency">
+							<f:fields>
+                                <ComboBox value="{Currency}" >
+                                    <core:Item text="CAD"/>
+                                    <core:Item text="USD"/>
+                                </ComboBox>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Supplier">
+							<f:fields>
+								<Input value="{Supplier}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Invoicing Party">
+							<f:fields>
+                                <ComboBox value="{InvoicingParty}" >
+                                    <core:Item text="1000001"/>
+                                    <core:Item text="1000002"/>
+                                </ComboBox>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Reviewed By">
+							<f:fields>
+								<Text text="{ReviewedBy}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Reviewed On">
+							<f:fields>
+								<Text text="{ReviewedOn}" />
+							</f:fields>
+						</f:FormElement> -->
+					<!-- </f:formElements>
+				</f:FormContainer> -->
+				<!-- <f:FormContainer >
+					<f:formElements> -->
+						<!-- <f:FormElement label="Approval Status">
+							<f:fields>
+								<ComboBox value="{ApprovalStatus}" >
+                                    <core:Item text="Pending Approval"/>
+                                    <core:Item text="Approved"/>
+                                    <core:Item text="Rejected"/>
+                                </ComboBox>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Document Date">
+							<f:fields>
+								<DatePicker value="{
+								path: 'DocumentDate',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: {source: {pattern: 'timestamp'}}
+							}"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Due Date">
+							<f:fields>
+								<DatePicker value="{
+								path: 'DueDate',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: {source: {pattern: 'timestamp'}}
+							}"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Document Number">
+							<f:fields>
+								<Input value="{DocumentNumber}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Invoice Document">
+							<f:fields>
+								<Link text="Sample Invoice 1" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Approved By">
+							<f:fields>
+								<Text text="{ReviewedBy}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Approved On">
+							<f:fields>
+								<Text text="{ReviewedBy}" />
+							</f:fields>
+						</f:FormElement> -->
+					<!-- </f:formElements>
+				</f:FormContainer> -->
+			<!-- </f:formContainers> -->
+		</f:SimpleForm>
+        <Title text="Approver comments"></Title>
+        <TextArea id="textAreaWithBinding2" value="approved by approver" showExceededText="true" width="100%" />
+        <Title text="Invoice Items"></Title>
+            <table:Table id="itemTable"
+				selectionMode="MultiToggle"
+				visibleRowCount="3" >
+				<table:columns>
+					<table:Column id="itemNo">
+						<Label text="Item Number" />
+						<table:template>
+							<Text text="{ItemNumber}" wrapping="false" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Description" />
+						<table:template>
+							<Input value="{Description}" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Net Amount" />
+						<table:template>
+							<Input value="{NetAmount}" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Quanity" />
+						<table:template>
+							<Input value="{Quanity}" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="UoM" />
+						<table:template>
+							<Input value="{UnitOfMeasure}" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="G/L Account" />
+						<table:template>
+                            <ComboBox value="{GLAccount}" >
+								<core:Item text="100000"/>
+                                <core:Item text="100001"/>
+                                <core:Item text="100002"/>
+							</ComboBox>
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Cost Center" />
+						<table:template>
+                            <ComboBox value="{GLAccount}" >
+								<core:Item text="100000"/>
+                                <core:Item text="100001"/>
+                                <core:Item text="100002"/>
+							</ComboBox>
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Plant" />
+						<table:template>
+                            <ComboBox value="{GLAccount}" >
+								<core:Item text="100000"/>
+                                <core:Item text="100001"/>
+                                <core:Item text="100002"/>
+							</ComboBox>
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Tax Code" />
+						<table:template>
+                            <ComboBox value="{GLAccount}" >
+								<core:Item text="100000"/>
+                                <core:Item text="100001"/>
+                                <core:Item text="100002"/>
+							</ComboBox>
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="Purchase Order" />
+						<table:template>
+							<Input value="{UnitOfMeasure}" />
+						</table:template>
+					</table:Column>
+                    <table:Column >
+						<Label text="PO Item" />
+						<table:template>
+							<Input value="{UnitOfMeasure}" />
+						</table:template>
+					</table:Column>
+				</table:columns>
+			</table:Table>
+        </content>
+    </Page>
+</mvc:View>

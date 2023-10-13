@@ -1,0 +1,33 @@
+<mvc:View controllerName="vimbasicapp.controller.HeaderView"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page title="{i18n>title}">
+        <content>
+            <List id="invoiceList"
+                items="{ path: '/Invoice_Header'}"
+                headerText="{uiModel>/ViewType}">
+                <ObjectListItem
+                    title="{DocumentNumber}"
+                    type="Active"
+                    press="onListItemPress"
+                    number="{
+                        parts:[{path:'InvoiceAmount'},{path:'Currency'}],
+                        type: 'sap.ui.model.type.Currency',
+                        formatOptions: {showMeasure: false}
+                    }"
+                    numberUnit="{Currency}">
+                    <firstStatus>
+                        <ObjectStatus
+                            text="{CompanyCode}"
+                            state="{
+                                path: 'Status',
+                                formatter: 'sap.m.sample.ObjectListItem.Formatter.status'
+                            }" />
+                    </firstStatus>
+                    <ObjectAttribute text="{Supplier} : {InvoicingParty}" />
+                    <ObjectAttribute text="{DueDate}" />
+                </ObjectListItem>
+            </List>
+        </content>
+    </Page>
+</mvc:View>

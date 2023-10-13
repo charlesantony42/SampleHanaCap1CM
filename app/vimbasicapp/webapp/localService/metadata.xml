@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="InvoiceService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Invoice_Header" EntityType="InvoiceService.Invoice_Header">
+                    <NavigationPropertyBinding Path="ITEMS" Target="Invoice_Items"/>
+                </EntitySet>
+                <EntitySet Name="Invoice_Items" EntityType="InvoiceService.Invoice_Items">
+                    <NavigationPropertyBinding Path="INTHeader" Target="Invoice_Header"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="Invoice_Header">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <NavigationProperty Name="ITEMS" Type="Collection(InvoiceService.Invoice_Items)" Partner="INTHeader">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="CompanyCode" Type="Edm.String" MaxLength="4"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="3"/>
+                <Property Name="DocumentDate" Type="Edm.DateTimeOffset"/>
+                <Property Name="DocumentNumber" Type="Edm.String" MaxLength="15"/>
+                <Property Name="DueDate" Type="Edm.DateTimeOffset"/>
+                <Property Name="InvoiceAmount" Type="Edm.Int32"/>
+                <Property Name="InvoicingParty" Type="Edm.String" MaxLength="15"/>
+                <Property Name="Supplier" Type="Edm.String" MaxLength="60"/>
+                <Property Name="ReviewedBy" Type="Edm.String" MaxLength="20"/>
+                <Property Name="ReviewedOn" Type="Edm.DateTimeOffset"/>
+                <Property Name="ApprovedBy" Type="Edm.String" MaxLength="20"/>
+                <Property Name="ApprovedOn" Type="Edm.DateTimeOffset"/>
+                <Property Name="ApprovalNotes" Type="Edm.String" MaxLength="1024"/>
+                <Property Name="DMSDocId" Type="Edm.String" MaxLength="100"/>
+                <Property Name="ApprovalStatus" Type="Edm.String" MaxLength="20"/>
+            </EntityType>
+            <EntityType Name="Invoice_Items">
+                <Key>
+                    <PropertyRef Name="INTHeader_ID"/>
+                    <PropertyRef Name="ItemNumber"/>
+                </Key>
+                <NavigationProperty Name="INTHeader" Type="InvoiceService.Invoice_Header" Partner="ITEMS">
+                    <ReferentialConstraint Property="INTHeader_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="INTHeader_ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="ItemNumber" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="CostCenter" Type="Edm.String" MaxLength="20"/>
+                <Property Name="Description" Type="Edm.String" MaxLength="100"/>
+                <Property Name="GLAccount" Type="Edm.String" MaxLength="10"/>
+                <Property Name="NetAmount" Type="Edm.Int32"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="20"/>
+                <Property Name="POItem" Type="Edm.String" MaxLength="20"/>
+                <Property Name="PurchaseOrder" Type="Edm.String" MaxLength="20"/>
+                <Property Name="Quantity" Type="Edm.String" MaxLength="20"/>
+                <Property Name="TaxCode" Type="Edm.String" MaxLength="20"/>
+                <Property Name="UnitOfMeasure" Type="Edm.String" MaxLength="20"/>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
